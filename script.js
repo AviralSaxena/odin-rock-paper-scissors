@@ -23,7 +23,7 @@ function playRound(playerSelection, computerSelection){
     }
 
     else if ((playerSelection == "SCISSORS") && (computerSelection == "ROCK")){
-        return ("You Lose! Scissors beat Rock\n");
+        return ("You Lose! Rock beats Scissor\n");
     }
 
     else if ((playerSelection == "SCISSORS") && (computerSelection == "PAPER")){
@@ -35,14 +35,63 @@ function playRound(playerSelection, computerSelection){
     }
 }
 
-function game(){
+const body = document.querySelector('body');
 
-    for (let i=0; i<5; i++){
-        let playerSelection = prompt("Enter your Choice:\n");
-        console.log(playRound(playerSelection.toUpperCase(),getComputerChoice()));
+const rockButton=document.createElement('button');
+const paperButton= document.createElement('button');    
+const scissorsButton= document.createElement('button');
+const result=document.createElement('div');
+const score = document.createElement('div');
+const winner = document.createElement('div');
+
+rockButton.textContent="Rock";
+paperButton.textContent="Paper";
+scissorsButton.textContent="Scissors";
+
+let playerScore = 0, computerScore = 0;
+
+rockButton.addEventListener('click',() => {
+    result.textContent = playRound('ROCK',getComputerChoice());
+    updateResult();
+});
+
+paperButton.addEventListener('click',() => {
+    result.textContent = playRound('PAPER',getComputerChoice());
+    updateResult();
+});
+
+scissorsButton.addEventListener('click',() => {
+    result.textContent = playRound('SCISSORS',getComputerChoice());
+    updateResult();
+});
+
+function updateResult(){
+    if (result.textContent.includes('You Win!')){
+        playerScore++;
+        if (playerScore === 5){
+            winner.textContent = "You Win!";
+            setTimeout(() => {
+                winner.textContent = "";
+            }, 1000);
+            playerScore = 0;
+            computerScore = 0;
+        }
     }
+
+    else if(result.textContent.includes('You Lose!')){
+        computerScore++;
+        if (computerScore === 5){
+            winner.textContent = "Computer Wins!";
+            setTimeout(() => {
+                winner.textContent = "";
+            }, 1000);
+            playerScore = 0;
+            computerScore = 0;
+        }
+    }
+
+    score.textContent = `Player Score = ${playerScore}\t\t Computer Score = ${computerScore}`;
 
 }
 
-
-
+body.append(rockButton,paperButton,scissorsButton,result,score,winner);
